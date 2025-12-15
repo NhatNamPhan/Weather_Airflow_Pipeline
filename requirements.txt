@@ -1,0 +1,15 @@
+# Open-Meteo Weather API
+openmeteo-requests
+requests-cache
+retry-requests
+
+# Data Processing
+pandas
+numpy
+
+# Database
+sqlalchemy
+psycopg2-binary
+
+# Environment variables
+python-dotenv
