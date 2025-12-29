@@ -52,12 +52,21 @@ airflow.cfg
 webserver_config.py
 logs/
 airflow-webserver.pid
+standalone_admin_password.txt
+airflow-scheduler.pid
 
-# Data files (optional - uncomment if you don't want to track data)
-# data/
-# *.csv
-# *.json
-# *.parquet
+# Cache
+.cache/
+.cache.sqlite
+requests-cache/
+
+# Data files - Keep folder structure but ignore contents
+data/raw/*
+data/processed/*
+data/archive/*
+!data/**/.gitkeep
+*.csv
+*.parquet
 
 # OS files
 .DS_Store
