@@ -4,7 +4,7 @@ import requests_cache
 from retry_requests import retry
 from datetime import datetime
 from pathlib import Path
-from scripts.config import (
+from config import (
     CITIES,
     WEATHER_API_URL,
     API_RETRY_COUNT,
@@ -20,9 +20,9 @@ def set_up_client():
     return openmeteo_requests.Client(session=retry_session)
 
 def extract_weather_data(start_date = None, end_date = None, **context):
-    if end_date == None:
+    if end_date is None:
         end_date = datetime.now().strftime("%Y-%m-%d")
-    if start_date == None:
+    if start_date is None:
         start_date = "2020-01-01"
     print(f"Extracting weather data from {start_date} to {end_date}")
     
@@ -54,10 +54,8 @@ def save_raw_data(responses, date_str):
         city_data = {
             "city": CITIES[idx]['name'],
             "latitude": response.Latitude(),
-            'longitude': response.Longitude(),
-            'elevation': response.Elevation(),
-            'timezone': response.Timezone(),
-            'timezone_abbreviation': response.TimezoneAbbreviation(),
+            "longitude": response.Longitude(),
+            "elevation": response.Elevation()
         }
         raw_data.append(city_data)
         

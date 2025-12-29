@@ -3,7 +3,7 @@
         {
             "name": "Washington",
             "latitude": "38.8951",
-            "longitude": "-77.03"
+            "longitude": "-77.0364"
         },
         {
             "name": "London",
@@ -17,8 +17,8 @@
         },
         {
             "name": "HaNoi",
-            "latitude": "21.0278",
-            "longitude": "105.8542"
+            "latitude": "21.0245",
+            "longitude": "105.8412"
         }
     ]
 }
