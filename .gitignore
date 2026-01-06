@@ -27,6 +27,7 @@ venv/
 ENV/
 env/
 .venv/
+env.airflow/
 
 # IDE
 .idea/
