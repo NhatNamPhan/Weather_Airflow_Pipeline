@@ -13,7 +13,7 @@ from config import (
 )
 
 def set_up_client():
-    cache_session = requests_cache.CachedSession('.cache', expire_after=-1)
+    cache_session = requests_cache.CachedSession(backend='memory', expire_after=-1)
     retry_session = retry(cache_session, retries=API_RETRY_COUNT, backoff_factor=API_BACKOFF_FACTOR)
     return openmeteo_requests.Client(session=retry_session)
 
