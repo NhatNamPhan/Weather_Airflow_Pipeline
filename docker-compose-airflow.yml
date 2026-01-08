@@ -1,20 +1,15 @@
 # Airflow Docker Compose - Simplified version for external PostgreSQL
 x-airflow-common: &airflow-common
   image: apache/airflow:2.8.1
+  env_file:
+    - .env.airflow
   environment: &airflow-common-env
     AIRFLOW__CORE__EXECUTOR: LocalExecutor
-    AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
     AIRFLOW__CORE__FERNET_KEY: ''
     AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'true'
     AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
     AIRFLOW__API__AUTH_BACKENDS: 'airflow.api.auth.backend.basic_auth,airflow.api.auth.backend.session'
     AIRFLOW__SCHEDULER__ENABLE_HEALTH_CHECK: 'true'
-    # Environment variables for your weather application
-    DB_HOST: ${DB_HOST}
-    DB_PORT: ${DB_PORT}
-    DB_NAME: ${DB_NAME}
-    DB_USER: ${DB_USER}
-    DB_PASSWORD: ${DB_PASSWORD}
   volumes:
     - ${AIRFLOW_PROJ_DIR:-.}/dags:/opt/airflow/dags
     - ${AIRFLOW_PROJ_DIR:-.}/logs:/opt/airflow/logs
