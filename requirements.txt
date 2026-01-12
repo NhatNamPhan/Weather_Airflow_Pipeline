@@ -4,11 +4,11 @@ requests-cache
 retry-requests
 
 # Data Processing
-pandas
+pandas>=2.0
 numpy
 
 # Database
-sqlalchemy
+sqlalchemy>=2.0
 psycopg2-binary
 
 # Environment variables
