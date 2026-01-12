@@ -27,6 +27,7 @@ venv/
 ENV/
 env/
 .venv/
+env.airflow/
 
 # IDE
 .idea/
@@ -67,6 +68,7 @@ data/archive/*
 *.csv
 *.parquet
 *.json
+!config/*.json
 
 # OS files
 .DS_Store

@@ -1,24 +1,24 @@
 {
-    "cities": [
-        {
-            "name": "Washington",
-            "latitude": "38.8951",
-            "longitude": "-77.0364"
-        },
-        {
-            "name": "London",
-            "latitude": "51.5085",
-            "longitude": "-0.1257"
-        },
-        {
-            "name": "Tokyo",
-            "latitude": "35.6895",
-            "longitude": "139.6917"
-        },
-        {
-            "name": "HaNoi",
-            "latitude": "21.0245",
-            "longitude": "105.8412"
-        }
-    ]
+  "cities": [
+    {
+      "name": "Washington DC",
+      "latitude": 38.8951,
+      "longitude": -77.0364
+    },
+    {
+      "name": "London",
+      "latitude": 51.5085,
+      "longitude": -0.1257
+    },
+    {
+      "name": "Tokyo",
+      "latitude": 35.6895,
+      "longitude": 139.6917
+    },
+    {
+      "name": "Hanoi",
+      "latitude": 21.0245,
+      "longitude": 105.8412
+    }
+  ]
 }
