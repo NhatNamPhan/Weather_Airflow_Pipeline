@@ -4,11 +4,9 @@ from datetime import datetime, timedelta
 import sys
 from pathlib import Path
 
-# Add scripts folder to Python path
 AIRFLOW_HOME = Path(__file__).parent.parent
 sys.path.insert(0, str(AIRFLOW_HOME / "scripts"))
 
-# Now import from scripts
 from extract import extract_weather_data
 from load import load_daily_data, load_hourly_data
 from transform import transform_daily_data, transform_hourly_data
@@ -30,21 +28,13 @@ dag = DAG(
     tags=['weather', 'pipeline']
 )
 
-# ============================================
 # WRAPPER FUNCTIONS
-# ============================================
-# Chú ý: WeatherApiResponse không thể serialize qua XCom
-# Nên mỗi task phải tự gọi extract_weather_data
 
 def extract_weather_wrapper(**context):
-    """
-    Extract weather data - chỉ return metadata để check success
-    """
-    print("📥 Starting extract task...")
+    print("Starting extract task...")
     responses = extract_weather_data(**context)
-    print(f"✅ Extracted data for {len(responses)} cities")
+    print(f"Extracted data for {len(responses)} cities")
     
-    # Return metadata thay vì responses object
     return {
         "status": "success",
         "num_cities": len(responses),
@@ -52,20 +42,15 @@ def extract_weather_wrapper(**context):
     }
 
 def transform_hourly_wrapper(**context):
-    """
-    Transform hourly data - re-extract vì không thể lấy từ XCom
-    """
-    print("🔄 Starting transform hourly task...")
+
+    print("Starting transform hourly task...")
     
-    # Re-extract data (vì responses không serialize được)
     responses = extract_weather_data(**context)
     
-    # Transform
     hourly_df = transform_hourly_data(responses, **context)
     
-    print(f"📊 Transformed {len(hourly_df)} hourly records")
+    print(f"Transformed {len(hourly_df)} hourly records")
     
-    # Return metadata
     return {
         "status": "success",
         "records": len(hourly_df),
@@ -73,20 +58,15 @@ def transform_hourly_wrapper(**context):
     }
 
 def transform_daily_wrapper(**context):
-    """
-    Transform daily data - re-extract vì không thể lấy từ XCom
-    """
-    print("🔄 Starting transform daily task...")
     
-    # Re-extract data (vì responses không serialize được)
+    print("Starting transform daily task...")
+    
     responses = extract_weather_data(**context)
     
-    # Transform
     daily_df = transform_daily_data(responses, **context)
     
-    print(f"📊 Transformed {len(daily_df)} daily records")
+    print(f"Transformed {len(daily_df)} daily records")
     
-    # Return metadata
     return {
         "status": "success",
         "records": len(daily_df),
@@ -94,19 +74,15 @@ def transform_daily_wrapper(**context):
     }
 
 def load_hourly_wrapper(**context):
-    """
-    Load hourly data to PostgreSQL
-    """
-    print("💾 Starting load hourly task...")
+
+    print("Starting load hourly task...")
     
-    # Re-extract và transform (vì DataFrame cũng khó serialize)
     responses = extract_weather_data(**context)
     hourly_df = transform_hourly_data(responses, **context)
     
-    # Load
     num_records = load_hourly_data(hourly_df, **context)
     
-    print(f"✅ Loaded {num_records} hourly records to PostgreSQL")
+    print(f"Loaded {num_records} hourly records to PostgreSQL")
     
     return {
         "status": "success",
@@ -115,19 +91,15 @@ def load_hourly_wrapper(**context):
     }
 
 def load_daily_wrapper(**context):
-    """
-    Load daily data to PostgreSQL
-    """
-    print("💾 Starting load daily task...")
+
+    print("Starting load daily task...")
     
-    # Re-extract và transform (vì DataFrame cũng khó serialize)
     responses = extract_weather_data(**context)
     daily_df = transform_daily_data(responses, **context)
     
-    # Load
     num_records = load_daily_data(daily_df, **context)
     
-    print(f"✅ Loaded {num_records} daily records to PostgreSQL")
+    print(f"Loaded {num_records} daily records to PostgreSQL")
     
     return {
         "status": "success",
@@ -135,7 +107,6 @@ def load_daily_wrapper(**context):
         "table": "weather_daily"
     }
 
-# Định nghĩa các tasks
 extract_task = PythonOperator(
     task_id='extract_weather_data',
     python_callable=extract_weather_wrapper,
@@ -172,18 +143,7 @@ load_daily_task = PythonOperator(
 )
 
 
-# ============================================
 # TASK DEPENDENCIES
-# ============================================
-# Workflow:
-# 1. extract_task: Validate data có thể lấy được từ API
-# 2. transform tasks: Chạy song song, mỗi task tự extract lại
-# 3. load tasks: Chạy sau transform, cũng tự extract + transform lại
-#
-# Lưu ý: Vì WeatherApiResponse và DataFrame không serialize được qua XCom,
-# nên mỗi task phải tự gọi lại extract_weather_data().
-# Trade-off: Gọi API nhiều lần hơn, nhưng tránh được XCom serialization issues.
-
 extract_task >> [transform_hourly_task, transform_daily_task]
 transform_hourly_task >> load_hourly_task
 transform_daily_task >> load_daily_task
