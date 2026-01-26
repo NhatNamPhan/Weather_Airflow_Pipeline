@@ -13,3 +13,6 @@ psycopg2-binary
 
 # Environment variables
 python-dotenv
+
+#Streamlit
+streamlit
