@@ -44,7 +44,7 @@ def load_cities_config():
 CITIES = load_cities_config()
 
 # Weather parameters
-DAILY_PARAMS = ["temperature_2m_max", "temperature_2m_min", "precipitation_sum"]
+DAILY_PARAMS = ["temperature_2m_max", "temperature_2m_min", "precipitation_sum", "weather_code"]
 HOURLY_PARAMS = ["temperature_2m", "precipitation", "weather_code", "relative_humidity_2m", "wind_speed_10m"]
 
 # Data retention (days) 
