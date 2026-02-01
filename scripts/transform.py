@@ -51,6 +51,7 @@ def transform_daily_data(responses, **context):
         daily_temperature_2m_max = daily.Variables(0).ValuesAsNumpy()
         daily_temperature_2m_min = daily.Variables(1).ValuesAsNumpy()
         daily_precipitation_sum = daily.Variables(2).ValuesAsNumpy()
+        daily_weather_code = daily.Variables(3).ValuesAsNumpy()
         
         daily_data = {
             "date": pd.date_range(
@@ -62,9 +63,10 @@ def transform_daily_data(responses, **context):
         }
 
         daily_data["city"] = CITIES[idx]["name"]
-        daily_data["temperature_2m_max"] = daily_temperature_2m_max
-        daily_data["temperature_2m_min"] = daily_temperature_2m_min
+        daily_data["temperature_max"] = daily_temperature_2m_max
+        daily_data["temperature_min"] = daily_temperature_2m_min
         daily_data["precipitation_sum"] = daily_precipitation_sum
+        daily_data["weather_code"] = daily_weather_code
         
         df = pd.DataFrame(daily_data)
         all_daily_data.append(df)
