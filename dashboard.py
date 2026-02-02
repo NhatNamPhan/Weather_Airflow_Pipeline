@@ -82,7 +82,7 @@ with col_city:
     )
 
 # Connect database
-@st.cache_data(ttl=3600)
+@st.cache_data(ttl=300)
 def load_data(city):
     engine = create_engine(DB_CONNECTION_STRING)
     sql = 'SELECT * FROM weather_daily WHERE city = %s'
